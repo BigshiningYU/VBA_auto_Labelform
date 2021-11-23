@@ -38,7 +38,7 @@ Sub SearchFile()
      Cells.Select
      Selection.Copy
    
-     Workbooks.Open Filename:="taehee book.xlsx"    ' open 함수를 썼는데 선택한 파일 수만큼 파일을 다시 여는건가?
+     Workbooks.Open Filename:="taehee book.xlsx" 
      Sheets.Add After:=ActiveSheet
      ActiveSheet.Paste
      
