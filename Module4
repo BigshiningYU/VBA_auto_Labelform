@@ -1,0 +1,85 @@
+Sub Shortsorting()
+'
+' 매크로2 매크로
+'
+ 
+
+    For i = 2 To (Worksheets.Count)
+    
+        
+        Worksheets(i).Activate
+        Range("B3").Select 'activecell 정렬할 때 커서를 데이터 위치에 이동
+        ActiveCell.Sort key1:=Range("C4"), order1:=xlAscending, Header:=xlYes
+        'activeCell대신 range("B3")를 넣어도 되지 않을까?
+        
+    
+    Next i
+    
+    Worksheets(1).Activate
+    
+End Sub
+
+
+Sub C_locationsorting()
+    
+    For i = 2 To (Worksheets.Count)
+        Worksheets(i).Activate
+    
+    
+        Dim RCount As Integer
+        Dim CCount As Integer
+    
+        RCount = Range("B3").CurrentRegion.Rows.Count - 1
+        CCount = Range("B3").CurrentRegion.Columns.Count
+    
+
+        Range("A4").Value = "=AND(COUNTIF(OFFSET(Sheet1!$G$13,,,COUNTA(Sheet1!$G$13:$G$50)),B4),IF(C4=20000,1,0))"
+
+        Range(Cells(4, 1), Cells(3 + RCount, 1)).FillDown
+    
+    
+        
+        Range("A4").Select
+        ActiveCell.Sort key1:=Range("A4"), order1:=xlDescending, Header:=xlYes
+    Next i
+    
+    Worksheets(1).Activate
+    
+    
+    
+End Sub
+
+
+Sub OneCablesorting()
+    
+    
+    For i = 2 To (Worksheets.Count)
+        Dim RCount As Integer
+        Dim CCount As Integer
+    
+        Worksheets(i).Activate
+    
+        RCount = Range("B3").CurrentRegion.Rows.Count - 1 ' 제목 제외하고 카운트하기 위해 -1 연산
+        CCount = Range("B3").CurrentRegion.Columns.Count
+    
+        Range(Cells(4, 1), Cells(3 + RCount, 1)).Value = "=COUNTIF(OFFSET($B$4,,,COUNTA($B$4:$B$100)),B4)"
+    
+        Range("A4").Select
+        ActiveCell.Sort key1:=Range("A4"), order1:=xlAscending, Header:=xlYes
+        
+        
+        
+        '첫행 삭제시 발생하는 참조오류를 제거하기 수식의 값을 복사 및 붙여넣기
+        Range("A4").Select
+        Range(Selection, Selection.End(xlDown)).Select
+        Selection.Copy
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Application.CutCopyMode = False
+    
+    
+    Next i
+    
+    Worksheets(1).Activate
+
+End Sub
