@@ -1,0 +1,67 @@
+******************************이미 파일을 불러왔을 때, 또 불러오면 에러발생, 에러 보수 필요***********************
+
+Sub SearchFile()
+
+ 
+   
+'taehee book 엑셀파일 만들기
+    
+     Dim strwkbook As String
+   '  Dim wk As Variant
+     
+     strwkbook = ThisWorkbook.Path
+     ChDir (strwkbook)
+   '  Set wk = Workbooks.Add
+   '  wk.SaveAs Filename:="taehee book.xlsx"
+
+      
+      
+'dialog 열어 복사할 workbooks 선택하기
+
+    Dim fd As FileDialog
+    Dim pathSelectedItem As Variant
+    
+    
+    Set fd = Application.FileDialog(msoFileDialogFilePicker)
+   
+    fd.AllowMultiSelect = True
+   
+    If fd.Show = -1 Then   ' -1은 파일 선택한 경우, 0은 파일 선택하지 않음
+   
+        For Each pathSelectedItem In fd.SelectedItems
+
+'선택한 엑셀파일 열기
+     
+     
+            Workbooks.Open Filename:=pathSelectedItem
+   
+            Cells.Select
+            Selection.Copy
+   
+          '  Workbooks.Open Filename:="taehee book.xlsx"
+          
+            Workbooks.Open Filename:=ThisWorkbook.Name
+            Sheets.Add After:=ActiveSheet
+            ActiveSheet.Paste
+   
+'시트 이름 바꾸기
+
+            Dim fname As String
+            fname = Mid(pathSelectedItem, InStrRev(pathSelectedItem, "\") + 1)
+            ActiveSheet.Name = fname
+   
+   
+'엑셀파일 닫기
+
+            Application.CutCopyMode = False
+            Workbooks(fname).Close
+     
+        Next pathSelectedItem
+    
+    
+    End If
+
+   
+    Worksheets(1).Activate
+    
+End Sub
