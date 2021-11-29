@@ -1,0 +1,14 @@
+Sub Formtec_formation()
+
+'mm M 변환
+
+'048-00 -> '' 변환
+
+'vlookup 이용해 품목 위치 구하기
+
+'정렬하기 key1: 위치, key2: 품명, key3: 길이 오름차순
+
+
+
+
+End Sub
