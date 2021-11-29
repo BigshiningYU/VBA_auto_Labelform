@@ -1,0 +1,51 @@
+Sub blankremoving()
+'Main 먼저 실행하지 않았을 때 경고 메세지 박스 필요
+
+
+
+    For i = 2 To (Worksheets.Count)
+    
+        Worksheets(i).Activate  'cell 선택 전 해당시트 활성화
+        Range("B3:B150").Select  '활성한 시트의 셀에서 select 메서드 작동 가능
+    
+    
+        '선택 셀 빈 행 제거
+        Selection.SpecialCells(xlCellTypeBlanks).Select
+        Selection.EntireRow.Delete
+        
+    Next i
+    
+    
+    Worksheets(1).Activate
+    
+End Sub
+
+
+'비고 있는 케이블 정렬하기
+Sub referencesorting()
+    
+    
+    
+    For i = 2 To Worksheets.Count
+    
+        Worksheets(i).Activate
+        Range("F3").FormulaR1C1 = "=Isblank(RC[-1])"
+        If Range("F3").Value = True Then
+            
+        Else
+            Range("B3").Select
+            ActiveCell.Sort key1:=Range("E4"), order1:=xlAscending, Header:=xlYes
+        
+        End If
+        
+        Range("F3").Clear
+
+        
+        
+    Next i
+    
+
+    Worksheets(1).Activate
+    
+End Sub
+
