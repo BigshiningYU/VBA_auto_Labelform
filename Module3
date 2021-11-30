@@ -1,14 +1,82 @@
 Sub Formtec_formation()
 
-'mm M 변환
 
-'048-00 -> '' 변환
+    Dim Rcount As Integer
+    Dim Ccount As Integer
+    
+    
+           
+    'mm M 변환
+    
+    For i = 2 To Worksheets.Count
+    
+        Worksheets(i).Activate
+    
+        Rcount = Range("B3").CurrentRegion.Rows.Count - 1 ' 제목 제외하고 카운트하기 위해 -1 연산
+        Ccount = Range("B3").CurrentRegion.Columns.Count
+        
+        For j = 4 To Rcount + 3
+        
+            Cells(j, 3).Value = Cells(j, 3).Value * 0.001 & "M"
+        
+        Next j
+        
+    Next i
+    
+    
+    
+    
+    
+    'vlookup 이용해 품목 위치 구하기
+    
 
-'vlookup 이용해 품목 위치 구하기
+    
+    For i = 2 To Worksheets.Count
+    
+        Worksheets(i).Activate
+        Range("A4").Value = "=VLOOKUP(B4,Sheet1!$B$10:$C$160,2,0)"
+    
+    
+        Rcount = Range("B3").CurrentRegion.Rows.Count - 1
+        Ccount = Range("B3").CurrentRegion.Columns.Count
+    
+        Range(Cells(4, 1), Cells(3 + Rcount, 1)).FillDown
+        
+        
+        '다른 함수로 인한 셀값 변경으로 발생하는 참조오류를 제거하기 위해 수식의 값을 복사 및 붙여넣기
+        
+        Range("A4").Select
+        Range(Selection, Selection.End(xlDown)).Select
+        Selection.Copy
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Application.CutCopyMode = False
+    
+    
+        '정렬하기 key1: 위치, key2: 품명, key3: 길이 오름차순
+        Range("A3").Value = "Location"
+        Range("A3").Activate
+        ActiveCell.Sort Key1:=Range("A3"), order1:=xlAscending, key2:=Range("B3"), order2:=xlAscending, _
+        key3:=Range("C3"), order3:=xlAscending, Header:=xlYes
+    
+    
+    Next i
+    
 
-'정렬하기 key1: 위치, key2: 품명, key3: 길이 오름차순
 
 
+    '048-00 -> '' 변환
+    
+    For i = 2 To Worksheets.Count
+    
+    
+        Columns("B:B").Select
+        Selection.Replace What:="048-00", Replacement:="-00", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
 
+    Next i
 
+    Worksheets(1).Activate
+    
 End Sub
