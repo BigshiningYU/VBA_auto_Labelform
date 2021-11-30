@@ -20,6 +20,26 @@ Sub blankremoving()
     
 End Sub
 
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' 수정 전 if구문 사용 
+ ''''       '비고 있는 케이블 정렬하기
+ ''''       Sub referencesorting()
+ ''''   
+ ''''           For i = 2 To Worksheets.Count
+ ''''               Worksheets(i).Activate
+ ''''               Range("F3").FormulaR1C1 = "=Isblank(RC[-1])"
+ ''''               If Range("F3").Value = True Then
+ ''''          
+ ''''               Else
+ ''''                   Range("B3").Select
+''''                   ActiveCell.Sort key1:=Range("E4"), order1:=xlAscending, Header:=xlYes
+''''                End If
+''''                Range("F3").Clear
+''''            Next i
+''''            Worksheets(1).Activate
+''''    
+''''        End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' 수정 후 filldown 매소드 (자동채우기) 사용
 
 '비고 있는 케이블 정렬하기
 Sub referencesorting()
@@ -28,18 +48,25 @@ Sub referencesorting()
     
     For i = 2 To Worksheets.Count
     
+        Dim Rcount As Integer
+        Dim Ccount As Integer
+    
+    
         Worksheets(i).Activate
-        Range("F3").FormulaR1C1 = "=Isblank(RC[-1])"
-        If Range("F3").Value = True Then
-            
-        Else
-            Range("B3").Select
-            ActiveCell.Sort key1:=Range("E4"), order1:=xlAscending, Header:=xlYes
+        Rcount = Range("B3").CurrentRegion.Rows.Count - 1
+        Ccount = Range("B3").CurrentRegion.Columns.Count
+    
+    
         
-        End If
+        Range("A4").Value = "=Isblank(E4)"
         
-        Range("F3").Clear
-
+        
+        Range(Cells(4, 1), Cells(3 + Rcount, 1)).FillDown
+        
+        
+        Range("B3").Select
+        ActiveCell.Sort Key1:=Range("A4"), order1:=xlAscending, Header:=xlYes
+ 
         
         
     Next i
@@ -48,4 +75,5 @@ Sub referencesorting()
     Worksheets(1).Activate
     
 End Sub
+
 
